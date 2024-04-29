@@ -1,2 +1,42 @@
 <h1>Добро пожаловать, учитель!</h1>
-<p>Здесь будет информация и функционал для учителя.</p>
+
+<h2>Дисциплины</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for subject in subjects %}
+        <tr>
+            <td>{{ subject.id }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('update_subject', subject_id=subject.id) }}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="new_name" value="{{ subject.name }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">Обновить</button>
+                        </div>
+                    </div>
+                </form>
+            </td>
+            <td>
+                <a href="{{ url_for('delete_subject', subject_id=subject.id) }}" class="btn btn-danger">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Добавить дисциплину</h2>
+<form method="POST" action="{{ url_for('add_subject') }}">
+    <div class="form-group">
+        <label for="new_subject_name">Название дисциплины</label>
+        <input type="text" class="form-control" id="new_subject_name" name="new_subject_name" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>

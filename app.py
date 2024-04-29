@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, flash, request, session
-from models import User, Admin, db
+from models import User, Admin, db, Subject
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -97,9 +97,45 @@ def login():
 def dashboard():
     if 'user_id' in session:
         user = User.query.get(session['user_id'])
-        return render_template('dashboard.html', user=user)
+        subjects = Subject.query.all()
+        return render_template('dashboard.html', user=user, subjects=subjects)
     else:
         return redirect(url_for('login'))
+
+@app.route('/add_subject', methods=['POST'])
+def add_subject():
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+        if user.role == 'teacher':
+            new_subject_name = request.form['new_subject_name']
+            subject = Subject(name=new_subject_name)
+            db.session.add(subject)
+            db.session.commit()
+            flash('Дисциплина добавлена', 'success')
+    return redirect(url_for('dashboard'))
+
+@app.route('/update_subject/<int:subject_id>', methods=['POST'])
+def update_subject(subject_id):
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+        if user.role == 'teacher':
+            subject = Subject.query.get(subject_id)
+            new_name = request.form['new_name']
+            subject.name = new_name
+            db.session.commit()
+            flash('Дисциплина обновлена', 'success')
+    return redirect(url_for('dashboard'))
+
+@app.route('/delete_subject/<int:subject_id>')
+def delete_subject(subject_id):
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+        if user.role == 'teacher':
+            subject = Subject.query.get(subject_id)
+            db.session.delete(subject)
+            db.session.commit()
+            flash('Дисциплина удалена', 'success')
+    return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
