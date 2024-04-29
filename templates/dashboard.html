@@ -2,7 +2,13 @@
 
 {% block content %}
 <div class="container">
-    <h1>Добро пожаловать, {{ user.username }}!</h1>
-    <p>Ваша роль: {{ user.role }}</p>
+    <h1>Личный кабинет</h1>
+    {% if user.role == 'teacher' %}
+        {% include 'teacher_template.html' %}
+    {% elif user.role == 'student' %}
+        {% include 'student_template.html' %}
+    {% else %}
+        <p>Роль пользователя не определена.</p>
+    {% endif %}
 </div>
 {% endblock %}
