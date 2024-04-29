@@ -1,2 +1,22 @@
 <h1>Добро пожаловать, студент!</h1>
-<p>Здесь будет информация и функционал для студента.</p>
+
+<h2>Дисциплины и тексты для изучения</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название дисциплины</th>
+            <th>Текст для изучения</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for subject in subjects %}
+        <tr>
+            <td>{{ subject.id }}</td>
+            <td>{{ subject.name }}</td>
+            <td>{{ subject.study_material }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

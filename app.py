@@ -149,5 +149,14 @@ def delete_subject(subject_id):
             flash('Дисциплина удалена', 'success')
     return redirect(url_for('dashboard'))
 
+@app.route('/student_dashboard')
+def student_dashboard():
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+        if user.role == 'student':
+            subjects = Subject.query.all()
+            return render_template('student_template.html', user=user, subjects=subjects)
+    return redirect(url_for('login'))
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
