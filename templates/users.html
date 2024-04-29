@@ -1,44 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Users</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Users</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('users') }}">
-                            <input type="hidden" name="user_id" value="{{ user.id }}">
-                            <select name="new_role" class="form-control">
-                                <option value="student" {% if user.role == 'student' %}selected{% endif %}>Student</option>
-                                <option value="teacher" {% if user.role == 'teacher' %}selected{% endif %}>Teacher</option>
-                            </select>
-                            <button type="submit" class="btn btn-primary">Update</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Пользователи</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя пользователя</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('users') }}">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <select name="new_role" class="form-control">
+                            <option value="student" {% if user.role == 'student' %}selected{% endif %}>Студент</option>
+                            <option value="teacher" {% if user.role == 'teacher' %}selected{% endif %}>Преподаватель</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Обновить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

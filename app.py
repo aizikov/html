@@ -22,10 +22,17 @@ with app.app_context():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    user = None
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+    return render_template('index.html', user=user)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    user = None
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
@@ -36,7 +43,7 @@ def register():
         db.session.commit()
         flash('Вы успешно зарегистрировались!', 'success')
         return redirect(url_for('login'))
-    return render_template('register.html')
+    return render_template('register.html', user=user)
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
@@ -70,6 +77,10 @@ def users():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    user = None
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -80,7 +91,7 @@ def login():
             return redirect(url_for('dashboard'))
         else:
             flash('Неверное имя пользователя или пароль', 'danger')
-    return render_template('login.html')
+    return render_template('login.html', user=user)
 
 @app.route('/dashboard')
 def dashboard():
@@ -91,4 +102,4 @@ def dashboard():
         return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
