@@ -123,7 +123,19 @@ def update_subject(subject_id):
             new_name = request.form['new_name']
             subject.name = new_name
             db.session.commit()
-            flash('Дисциплина обновлена', 'success')
+            flash('Название дисциплины обновлено', 'success')
+    return redirect(url_for('dashboard'))
+
+@app.route('/update_study_material/<int:subject_id>', methods=['POST'])
+def update_study_material(subject_id):
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+        if user.role == 'teacher':
+            subject = Subject.query.get(subject_id)
+            new_study_material = request.form['new_study_material']
+            subject.study_material = new_study_material
+            db.session.commit()
+            flash('Текст для изучения обновлен', 'success')
     return redirect(url_for('dashboard'))
 
 @app.route('/delete_subject/<int:subject_id>')

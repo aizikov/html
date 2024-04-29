@@ -7,6 +7,7 @@
         <tr>
             <th>ID</th>
             <th>Название</th>
+            <th>Текст для изучения</th>
             <th>Действия</th>
         </tr>
     </thead>
@@ -22,6 +23,12 @@
                             <button class="btn btn-primary" type="submit">Обновить</button>
                         </div>
                     </div>
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="{{ url_for('update_study_material', subject_id=subject.id) }}">
+                    <textarea class="form-control" name="new_study_material" rows="5">{{ subject.study_material }}</textarea>
+                    <button class="btn btn-primary mt-2" type="submit">Сохранить текст</button>
                 </form>
             </td>
             <td>
